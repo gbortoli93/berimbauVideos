@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-md dark bg-dark fixed-top">
+        <ul class="navbar-nav mr-auto">
+            <a class="navbar-brand" href="/"><img width="70px" height="40px" th:src="@{/images/logo.png}"/></a>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/}">Home</a>
+            </li>
+            <li th:unless="${session.isEmpty()}" class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/user/favoritos}">Favoritos</a>
+            </li>
+            <li th:if="${session.isEmpty()}" class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/visitor/signup}">Cadastro</a>
+            </li>
+            <li th:if="${!session.isEmpty() and session.user[0].role == 'USER'}" class="nav-item">
+                <a class="nav-link" href="#"
+                   th:href="${session.user[0].role} == 'ADMIN' ? @{'/user/' + ${session.userId} +'/edit'} : @{'/user/edit'}">Editar
+                    Cadastro</a>
+            </li>
+            <li th:if="${!session.isEmpty() and session.user[0].role == 'ADMIN'}" class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/admin/adicionarvideo}">Adicionar Vídeo</a>
+            </li>
+            <li th:if="${!session.isEmpty() and session.user[0].role == 'ADMIN'}" class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/admin/listausuarios}">Lista de Usuários</a>
+            </li>
+            <li th:if="${!session.isEmpty() and session.user[0].role == 'ADMIN'}" class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/admin/listavideos}">Lista de Vídeos</a>
+            </li>
+        </ul>
+        <div>
+            <form th:unless="${session.isEmpty()}" th:action="@{/user/logout}" method="post">
+                <button class="btn btn-outline-primary" type="submit">Logout</button>
+            </form>
+        </div>
+        <div>
+            <a th:if="${session.isEmpty()}" th:href="@{/user/login}" method="get">
+                <input class="btn btn-outline-primary" type="button" value="Login"/>
+            </a>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

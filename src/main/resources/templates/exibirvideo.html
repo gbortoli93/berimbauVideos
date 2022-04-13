@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<div th:replace="fragments/header :: header"/>
+<body>
+<section layout:fragment="body">
+    <div class="container">
+        <div class="card">
+            <div class="embed-responsive embed-responsive-16by9">
+                <video width="640" height="480" controls>
+                    <source th:src="@{'arquivovideo/' + ${video.videoId}}" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-body">
+                <h4 th:text="'Nome: ' + ${video.nome}" class="card-title"></h4>
+                <p class="card-text">Avaliação Atual:</p>
+                <div id="avaliacao"></div>
+                <br>
+                <p th:text="'Descrição: ' + ${video.descricao}" class="card-text"></p>
+                <p th:unless="${session.isEmpty()}" class="card-text">Avaliar:</p>
+                <form th:unless="${session.isEmpty()}" th:action="'/video/' + ${video.videoId} + '/avaliarvideo/'" method="post">
+                    <input th:value="${video.videoId}" hidden/>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="avaliacao" id="avaliacaoRadio1" value="1">
+                        <label class="form-check-label" for="avaliacaoRadio1">1</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="avaliacao" id="avaliacaoRadio2" value="2">
+                        <label class="form-check-label" for="avaliacaoRadio2">2</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="avaliacao" id="avaliacaoRadio3" value="3">
+                        <label class="form-check-label" for="avaliacaoRadio3">3</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="avaliacao" id="avaliacaoRadio4" value="4">
+                        <label class="form-check-label" for="avaliacaoRadio4">4</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="avaliacao" id="avaliacaoRadio5" value="5">
+                        <label class="form-check-label" for="avaliacaoRadio5">5</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="btn-outline-primary btn-sm" type="submit" name="avaliar" id="avaliar" value="Avaliar"/>
+                    </div>
+                </form>
+                <br>
+                <div th:unless="${session.isEmpty()}">
+                    <div th:unless="${falca == true}">
+                        <form th:action="@{'/video/' + ${video.videoId} + '/adicionarfavoritos/'}" method="post">
+                            <button type="submit" class="btn btn-outline-primary">Adicionar aos favoritos</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <form th:unless="${session.isEmpty()}" th:action="@{'/video/' + ${video.videoId} + '/comentarios/incluir'}"
+              method="post">
+            <h4><i>Enviar Comentário:</i></h4>
+            <textarea class="form-control" name="comentario" id="comentario"></textarea>
+            <button type="submit" class="btn btn-outline-primary">Enviar Comentário</button>
+        </form>
+        <br>
+        <h4><i>Comentários:</i></h4>
+        <h2 th:if="${video.comentarios.isEmpty()}"><i>Nenhum comentário ainda, seja o primeiro!</i></h2>
+        <div th:each="comentario : ${video.comentarios}" class="card">
+            <div class="card-body">
+                <div class="card-header">
+                    <p th:text="'Usuário: ' + ${comentario.usuario.nomeUsuario}" class="card-title"></p>
+                    <small th:text="${comentario.data}"></small>
+                </div>
+                <p th:text="${comentario.texto}" class="card-text"></p>
+                <form th:if="${session.user[0].role == 'ADMIN'}"
+                      th:action="@{'/admin/comentario/delete/' + ${comentario.comentarioId}}" method="post">
+                    <input type="hidden" id="videoId" name="videoId" th:value="${video.videoId}"/>
+                    <input class="btn btn-sm btn-outline-danger" type="submit" value="Deletar Comentário"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <th:block>
+        <script th:inline="javascript">
+            function rateyoAvaliacao(selector, rating) {
+                $(selector).rateYo({
+                    rating: rating,
+                    readOnly: true
+                });
+            }
+
+            rateyoAvaliacao("#avaliacao",/*[[${video.avaliacao}]]*/);
+        </script>
+    </th:block>
+</section>
+
+</body>
+
+</html>

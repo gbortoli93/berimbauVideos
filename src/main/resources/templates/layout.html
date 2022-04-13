@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+<link th:href="@{/css/album.css}" href="../../../css/album.css"    rel="stylesheet"/>
+<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css}"/>
+
+<script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<title th:text="'Berimbau Vídeos - ' + ${titulo}"></title>
+<body style="background-color: #f8f9fa">
+<!-- fragmento Menu -->
+<div th:replace="fragments/header :: header"></div>
+<br>
+<br>
+<br>
+<!-- fragmento corpo da pagina -->
+<div class="container" style="background-color: white">
+    <section layout:fragment="body">
+        conteudo principal
+    </section>
+</div>
+<br>
+<!-- fragmento Footer -->
+<footer th:replace="fragments/footer :: footer">
+    <div>footer</div>
+</footer>
+
+</body>
+
+</html>

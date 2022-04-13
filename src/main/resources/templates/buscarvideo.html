@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<section layout:fragment="body">
+    <form th:action="@{/video/search}" th:method="GET">
+        <label for="inputVideo">Buscar Vídeo</label>
+        <input type="text" th:name="input" maxlength="30" class="form-control" id="inputVideo">
+        <br>
+        <button class="btn btn-outline-success" type="submit">Buscar Vídeo</button>
+    </form>
+    <br>
+    <i><h2 th:text="'Resultados para: ' + ${param.input}"></h2></i>
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" th:each="video : ${videos}">
+                    <div class="card mb-4 box-shadow">
+                        <a th:href="@{'/video/watch/' + ${video.videoId}}">
+                            <img class="card-img-top" width="150" height="120" th:src="@{'/video/arquivominiatura/' + ${video.videoId}}"
+                                 alt="Miniatura">
+                        </a>
+                        <div class="card-title">
+                            <a th:href="@{'/video/watch/' + ${video.videoId}}"><h5 th:text="${video.nome}"></h5></a>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text" th:text="'Avaliação: ' +  ${video.avaliacao} + '/ 5'"></p>
+                            <p class="card-text" th:text="'Descrição: ' + ${video.descricao}"></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted" th:text="'Duração: ' + ${video.duracao}"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${videos.isEmpty()}">
+                    <h2><i>Nenhum vídeo encontrado :(</i></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+
+</html>
